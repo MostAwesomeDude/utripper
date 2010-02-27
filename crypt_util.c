@@ -54,7 +54,7 @@ static char b2a[64] = "./0123456789"
 /* Permutation done once on the 56 bit 
    key derived from the original 8 byte ASCII key.
 */
-static u32 pc1[56] = {
+static uint32_t pc1[56] = {
 	57, 49, 41, 33, 25, 17,  9,  1, 58, 50, 42, 34, 26, 18,
 	10,  2, 59, 51, 43, 35, 27, 19, 11,  3, 60, 52, 44, 36,
 	63, 55, 47, 39, 31, 23, 15,  7, 62, 54, 46, 38, 30, 22,
@@ -64,12 +64,12 @@ static u32 pc1[56] = {
 /* How much to rotate each 28 bit half of the pc1 permutated
    56 bit key before using pc2 to give the i' key
 */
-static u32 totrot[16] = {
+static uint32_t totrot[16] = {
 	1, 2, 4, 6, 8, 10, 12, 14, 15, 17, 19, 21, 23, 25, 27, 28
 };
 
 /* Permutation giving the key of the i' DES round */
-static u32 pc2[48] = {
+static uint32_t pc2[48] = {
 	14, 17, 11, 24,  1,  5,  3, 28, 15,  6, 21, 10,
 	23, 19, 12,  4, 26,  8, 16,  7, 27, 20, 13,  2,
 	41, 52, 31, 37, 47, 55, 30, 40, 51, 45, 33, 48,
@@ -79,7 +79,7 @@ static u32 pc2[48] = {
 /* Reference copy of the expansion table which selects
    bits from the 32 bit intermediate result.
 */
-static u32 eref[48] = {
+static uint32_t eref[48] = {
 	32,  1,  2,  3,  4,  5,  4,  5,  6,  7,  8,  9,
 	8,  9, 10, 11, 12, 13, 12, 13, 14, 15, 16, 17,
 	16, 17, 18, 19, 20, 21, 20, 21, 22, 23, 24, 25,
@@ -87,13 +87,13 @@ static u32 eref[48] = {
 };
 
 /* Permutation done on the result of sbox lookups */
-static u32 perm32[32] = {
+static uint32_t perm32[32] = {
 	16,  7, 20, 21, 29, 12, 28, 17,  1, 15, 23, 26,  5, 18, 31, 10,
 	2,  8, 24, 14, 32, 27,  3,  9, 19, 13, 30,  6, 22, 11,  4, 25
 };
 
 /* The sboxes */
-static u32 sbox[8][4][16]= {
+static uint32_t sbox[8][4][16]= {
 	{ { 14,  4, 13,  1,  2, 15, 11,  8,  3, 10,  6, 12,  5,  9,  0,  7 },
           {  0, 15,  7,  4, 14,  2, 13,  1, 10,  6, 12, 11,  9,  5,  3,  8 },
           {  4,  1, 14,  8, 13,  6,  2, 11, 15, 12,  9,  7,  3, 10,  5,  0 },
@@ -142,7 +142,7 @@ static u32 sbox[8][4][16]= {
    use for it, but it is needed if you will develop
    this module into a general DES package.
 */
-static u8 inital_perm[64] = {
+static uint8_t inital_perm[64] = {
 	58, 50, 42, 34, 26, 18, 10,  2, 60, 52, 44, 36, 28, 20, 12, 4,
 	62, 54, 46, 38, 30, 22, 14,  6, 64, 56, 48, 40, 32, 24, 16, 8,
 	57, 49, 41, 33, 25, 17,  9,  1, 59, 51, 43, 35, 27, 19, 11, 3,
@@ -152,7 +152,7 @@ static u8 inital_perm[64] = {
 #endif
 
 /* Final permutation matrix -- not used directly */
-static u8 final_perm[64] = {
+static uint8_t final_perm[64] = {
 	40,  8, 48, 16, 56, 24, 64, 32, 39,  7, 47, 15, 55, 23, 63, 31,
 	38,  6, 46, 14, 54, 22, 62, 30, 37,  5, 45, 13, 53, 21, 61, 29,
 	36,  4, 44, 12, 52, 20, 60, 28, 35,  3, 43, 11, 51, 19, 59, 27,
@@ -161,7 +161,7 @@ static u8 final_perm[64] = {
 
 /* Macro to set a bit (0..23) */
 /* #define BITMASK(i) ( (1<<(11-(i)%12+3)) << ((i)<12?16:0) ) */
-static u32 bitmask[] = {
+static uint32_t bitmask[] = {
 	0x40000000, 0x20000000, 0x10000000, 0x08000000,
 	0x04000000, 0x02000000, 0x01000000, 0x00800000,
 	0x00400000, 0x00200000, 0x00100000, 0x00080000,
@@ -182,13 +182,13 @@ static u32 bitmask[] = {
 
 */
 /* SWAPPED the third and the fourth for cache */
-static u32 mk_keytab_table[8][16][128][2];
+static uint32_t mk_keytab_table[8][16][128][2];
 
-static u8 bytemask[8]  = {
+static uint8_t bytemask[8]  = {
 	0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01
 };
 
-static u32 longmask[32] = {
+static uint32_t longmask[32] = {
 	0x80000000, 0x40000000, 0x20000000, 0x10000000,
 	0x08000000, 0x04000000, 0x02000000, 0x01000000,
 	0x00800000, 0x00400000, 0x00200000, 0x00100000,
@@ -208,7 +208,7 @@ static u32 longmask[32] = {
 void
 crypt_init(struct crypt_state *crs)
 {
-	u32 *sbbuf;
+	uint32_t *sbbuf;
 
 	sbbuf = malloc(sizeof(int) * SBUFSIZE * 4);
 	crs->sb[0] = sbbuf;
@@ -234,10 +234,10 @@ crypt_exit(struct crypt_state *crs)
 /* Generate the key table before running the 25 DES rounds */
 
 static void
-mk_keytab(char *key, u32 ktab[16][2])
+mk_keytab(char *key, uint32_t ktab[16][2])
 {
-	u32 i,j;
-	u32 *k,*mkt;
+	uint32_t i,j;
+	uint32_t *k,*mkt;
 	char t;
 
 	memset((char*)&ktab[0][0], 0, sizeof(int) * 32);
@@ -260,8 +260,8 @@ void
 rcrypt(struct crypt_state *crs, char *salt,
        unsigned char *key, unsigned char outbuf[][16])
 {
-	u32 ktab[16][2];
-	u32 res[4];
+	uint32_t ktab[16][2];
+	uint32_t res[4];
 	int i,j;
 
 	setup_salt(crs, salt);
@@ -289,11 +289,11 @@ rcrypt(struct crypt_state *crs, char *salt,
 /* Do final permutations and convert to ASCII */
 
 void
-output_conversion(struct crypt_state *crs, u32 *res, char *outbuf)
+output_conversion(struct crypt_state *crs, uint32_t *res, char *outbuf)
 {
-	u32 i;
-	u32 t,v1,v2;
-	u32 l1, l2, r1, r2;
+	uint32_t i;
+	uint32_t t,v1,v2;
+	uint32_t l1, l2, r1, r2;
 
 	l1 = res[0];
 	l2 = res[1];
@@ -344,25 +344,25 @@ output_conversion(struct crypt_state *crs, u32 *res, char *outbuf)
 
 #else /* HAVE_MMX */
 
-static INLINE void mk_keytab_simple(char *key, u32 *ktab);
+static INLINE void mk_keytab_simple(char *key, uint32_t *ktab);
 
-static u32 ktcache[32];
-static u32 *gmkt;
+static uint32_t ktcache[32];
+static uint32_t *gmkt;
 
 #ifdef SMALL_CACHE
-static u32 sktab[N_CS*N_CS][16][2];
-static u32 sres[N_CS*N_CS][4];
+static uint32_t sktab[N_CS*N_CS][16][2];
+static uint32_t sres[N_CS*N_CS][4];
 #else
-static u32 sktab[N_CS][16][2];
-static u32 sres[N_CS][4];
+static uint32_t sktab[N_CS][16][2];
+static uint32_t sres[N_CS][4];
 #endif
 
 
 static INLINE void
-mk_keytab_simple(char *key, u32 *ktab)
+mk_keytab_simple(char *key, uint32_t *ktab)
 {
-	u32 i,j;
-	u32 *k,*mkt;
+	uint32_t i,j;
+	uint32_t *k,*mkt;
 	char t;
 
 	memset((char*)ktab, 0, sizeof(int) * 32);
@@ -407,12 +407,12 @@ rcrypt(struct crypt_state *crs, char *salt,
 		key[6] = cs[i];
 		key[7] = cs[0];
 
-		mk_keytab_simple(key, (u32 *)&sktab[i * N_CS][0][0]);
+		mk_keytab_simple(key, (uint32_t *)&sktab[i * N_CS][0][0]);
 
 #if 0
 		for (j = 1; j < N_CS; j++) {
-			u32 *kt;
-			kt = (u32 *)&sktab[i * N_CS + j][0][0];
+			uint32_t *kt;
+			kt = (uint32_t *)&sktab[i * N_CS + j][0][0];
 			memcpy(kt, ktcache, sizeof(int) * 32);
 		}
 #else
@@ -427,8 +427,8 @@ rcrypt(struct crypt_state *crs, char *salt,
 #endif
 
 		for (j = 1; j < N_CS; j++) {
-			u32 *kt, *mkt;
-			kt = (u32 *)&sktab[i*N_CS+j][0][0];
+			uint32_t *kt, *mkt;
+			kt = (uint32_t *)&sktab[i*N_CS+j][0][0];
 			mkt = gmkt;
 
 			for (k = 0; k < 16; mkt += 256, k++) {
@@ -439,7 +439,7 @@ rcrypt(struct crypt_state *crs, char *salt,
 	}
 
 	for (i = 0; i < N_CS * N_CS; i += SIMUL_KEYS)
-		crypt_core_mmx(sres[i], crs->sb, (u32 *)&sktab[i][0][0]);
+		crypt_core_mmx(sres[i], crs->sb, (uint32_t *)&sktab[i][0][0]);
 
 	for (i = 0; i < N_CS * N_CS; i++)
 		output_conversion_mmx(crs, sres[i], outbuf[i]);
@@ -454,12 +454,12 @@ rcrypt(struct crypt_state *crs, char *salt,
 		key[6] = cs[i];
 		key[7] = cs[0];
 
-		mk_keytab_simple(key, (u32 *)&sktab[0][0][0]);
+		mk_keytab_simple(key, (uint32_t *)&sktab[0][0][0]);
 
 #if 0
 		for (j = 1; j < N_CS; j++) {
-			u32 *kt;
-			kt = (u32 *)&sktab[j][0][0];
+			uint32_t *kt;
+			kt = (uint32_t *)&sktab[j][0][0];
 			memcpy(kt, ktcache, sizeof(int) * 32);
 		}
 #else
@@ -474,9 +474,9 @@ rcrypt(struct crypt_state *crs, char *salt,
 #endif
 
 		for (j = 1; j < N_CS; j ++) {
-			u32 *kt, *mkt;
+			uint32_t *kt, *mkt;
 
-			kt = (u32 *)&sktab[j][0][0];
+			kt = (uint32_t *)&sktab[j][0][0];
 
 			mkt = gmkt;
 			for (k = 0; k < 16; mkt += 256, k++) {
@@ -487,13 +487,13 @@ rcrypt(struct crypt_state *crs, char *salt,
 
 #if 1
 		for (j = 0; j < N_CS; j += SIMUL_KEYS)
-			crypt_core_mmx(sres[j], crs->sb, (u32 *)&sktab[j][0][0]);
+			crypt_core_mmx(sres[j], crs->sb, (uint32_t *)&sktab[j][0][0]);
 
 		for (j = 0; j < N_CS; j++)
 			output_conversion_mmx(crs, sres[j], outbuf[i*N_CS+j]);
 #else
 		for (j = 0; j < N_CS; j += SIMUL_KEYS) {
-			crypt_core_mmx(sres[j], crs->sb, (u32 *)&sktab[j][0][0]);
+			crypt_core_mmx(sres[j], crs->sb, (uint32_t *)&sktab[j][0][0]);
 			output_conversion_mmx(crs, sres[j], outbuf[i*N_CS+j]);
 			output_conversion_mmx(crs, sres[j+1], outbuf[i*N_CS+j+1]);
 		}
@@ -527,10 +527,10 @@ crypt(char *key, char *salt)
 
 static void
 pr_bits(a,n)
-  u32 *a;
-  u32 n;
+  uint32_t *a;
+  uint32_t n;
 {
-	u32 i,j,t,tmp;
+	uint32_t i,j,t,tmp;
 	n/=8;
 	for(i=0; i<n; i++) {
 		tmp=0;
@@ -545,10 +545,10 @@ pr_bits(a,n)
 
 static void
 set_bits(v,b)
-  u32 v;
-  u32 *b;
+  uint32_t v;
+  uint32_t *b;
 {
-	u32 i;
+	uint32_t i;
 	*b = 0;
 	for(i=0; i<24; i++)
 		if(v & longmask[8+i])
@@ -566,11 +566,11 @@ set_bits(v,b)
 static void
 init_des(struct crypt_state *crs)
 {
-	u32 tbl_long,bit_within_long,comes_from_bit;
-	u32 bit,sg,j;
-	u32 bit_within_byte,key_byte,byte_value;
-	u32 round,mask;
-	u32 eperm32tab[4][256][2];
+	uint32_t tbl_long,bit_within_long,comes_from_bit;
+	uint32_t bit,sg,j;
+	uint32_t bit_within_byte,key_byte,byte_value;
+	uint32_t round,mask;
+	uint32_t eperm32tab[4][256][2];
 
 	memset((char*)mk_keytab_table, 0, sizeof mk_keytab_table);
     
@@ -620,7 +620,7 @@ init_des(struct crypt_state *crs)
 
 	memset((char*)eperm32tab, 0, sizeof eperm32tab);
 	for (bit=0; bit<48; bit++) {
-		u32 mask1,comes_from;
+		uint32_t mask1,comes_from;
 	
 		comes_from = perm32[eref[bit]-1]-1;
 		mask1      = bytemask[comes_from % 8];
@@ -645,13 +645,13 @@ init_des(struct crypt_state *crs)
 	*/
 
 	for(sg=0; sg<4; sg++) {
-		u32 j1,j2;
-		u32 s1,s2;
+		uint32_t j1,j2;
+		uint32_t s1,s2;
     
 		for (j1=0; j1<64; j1++) {
 			s1 = s_lookup(2*sg,j1);
 			for(j2=0; j2<64; j2++) {
-				u32 to_permute,inx;
+				uint32_t to_permute,inx;
 
 				s2         = s_lookup(2*sg+1,j2);
 				to_permute = ((s1<<4)  | s2) << (24-8*sg);
@@ -678,7 +678,7 @@ init_des(struct crypt_state *crs)
 */
 
 static INLINE
-void shuffle_sb(u32 *k, u32 saltbits)
+void shuffle_sb(uint32_t *k, uint32_t saltbits)
 {
 	int j, x;
 	for (j=4096; j--;) {
@@ -695,7 +695,7 @@ void shuffle_sb(u32 *k, u32 saltbits)
 static void
 setup_salt(struct crypt_state *crs, char *salt)
 {
-	u32 i, j, saltbits;
+	uint32_t i, j, saltbits;
 
 	if(salt[0] == crs->salt[0] && salt[1] == crs->salt[1])
 		return;
@@ -750,9 +750,9 @@ setup_salt(struct crypt_state *crs, char *salt)
 
 	memset((char*)crs->efp, 0, sizeof(int) * 16 * 64 * 2);
 	for (i=0; i<64; i++) {
-		u32 o_bit,o_long;
-		u32 word_value,mask1,mask2,comes_from_f_bit,comes_from_e_bit;
-		u32 comes_from_word,bit_within_word;
+		uint32_t o_bit,o_long;
+		uint32_t word_value,mask1,mask2,comes_from_f_bit,comes_from_e_bit;
+		uint32_t comes_from_word,bit_within_word;
 
 		/* See where bit i belongs in the two 32 bit long's */
 		o_long = i / 32; /* 0..1  */
@@ -815,8 +815,8 @@ main()
 */
 /* These are deleted for reentrancy */
 
-u32 sb0[8192], sb1[8192], sb2[8192], sb3[8192];
-static u32 *sb[4] = {sb0,sb1,sb2,sb3}; 
+uint32_t sb0[8192], sb1[8192], sb2[8192], sb3[8192];
+static uint32_t *sb[4] = {sb0,sb1,sb2,sb3};
 
 /* efp: undo an extra e selection and do final
         permutation giving the DES result.
@@ -826,12 +826,12 @@ static u32 *sb[4] = {sb0,sb1,sb2,sb3};
 */
 /* This is deleted for reentrancy */
 
-u32 efp[16][64][2];
+uint32_t efp[16][64][2];
 
 /* The 16 DES keys in BITMASK format */
 /* this is deleted for reentrancy */
 
-u32 keytab[16][2];
+uint32_t keytab[16][2];
 
 /* eperm32tab: do 32 bit permutation and E selection
 
@@ -843,6 +843,6 @@ u32 keytab[16][2];
 
 */
 /* This is used in init_des() only */
-static u32 eperm32tab[4][256][2];
+static uint32_t eperm32tab[4][256][2];
 
 #endif

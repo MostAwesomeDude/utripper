@@ -1,6 +1,6 @@
 /* crypt_core */
 
-#define SBA(sb, v) (*(u32*)((char*)(sb)+(v)))
+#define SBA(sb, v) (*(uint32_t*)((char*)(sb)+(v)))
 
 #define F(I, O1, O2, SBX, SBY)                                        \
     s = *k++ ^ I;                                                     \
@@ -13,12 +13,12 @@
 #define H G(r1, r2, l1, l2); G(l1, l2, r1, r2)
 
 void
-crypt_core_default(u32 result[], u32 **sb, u32 *ktab)
+crypt_core_default(uint32_t result[], uint32_t **sb, uint32_t *ktab)
 {
 	int i, j;
-	u32 l1, l2, r1, r2, s;
-	u32 *k;
-	u32 *sb0, *sb1, *sb2, *sb3;
+	uint32_t l1, l2, r1, r2, s;
+	uint32_t *k;
+	uint32_t *sb0, *sb1, *sb2, *sb3;
 
 	sb0 = sb[0];
 	sb1 = sb[1];

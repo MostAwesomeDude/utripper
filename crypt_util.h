@@ -5,11 +5,7 @@
 #ifndef _CRYPT_UTIL_H
 #define _CRYPT_UTIL_H
 
-typedef unsigned char u8;
-typedef unsigned int u32;
-#ifdef __LP64__
-typedef unsigned long u64;
-#endif
+#include <stdint.h>
 
 #ifdef HAVE_MMX
 #define rcrypt rcrypt_mmx
@@ -26,12 +22,12 @@ typedef unsigned long u64;
 /* external data types */
 
 struct crypt_state {
-	u32 efp[16][64][2];
-	u32 e_inverse[64];
-	u32 disturbed_e[48];
-	u32 *sb[4];
-	u32 oldsaltbits;
-	u8 salt[4];
+	uint32_t efp[16][64][2];
+	uint32_t e_inverse[64];
+	uint32_t disturbed_e[48];
+	uint32_t *sb[4];
+	uint32_t oldsaltbits;
+	uint8_t salt[4];
 	int sequential;
 };
 
@@ -40,7 +36,7 @@ struct crypt_state {
 void crypt_init(struct crypt_state *crs);
 void crypt_exit(struct crypt_state *crs);
 void rcrypt(struct crypt_state *crs, char *salt, unsigned char *key, unsigned char outbuf[][16]);
-void output_conversion(struct crypt_state *crs, u32 *res, char *outbuf);
-void crypt_core(u32 result[], u32 **sb, u32 *ktab);
+void output_conversion(struct crypt_state *crs, uint32_t *res, char *outbuf);
+void crypt_core(uint32_t result[], uint32_t **sb, uint32_t *ktab);
 
 #endif /* _CRYPT_UTIL_H */
