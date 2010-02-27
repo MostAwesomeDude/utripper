@@ -8,15 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <regex.h>
 
 #include "ut.h"
 #include "crypt_util.h"
-
-#if defined USE_SYSTEM_REGEX
-# include <regex.h>
-#else
-# include "regex.h"
-#endif
 
 /* all character set (the first 64 characters are also valid for salt) */
 unsigned char cs[N_CS] = {

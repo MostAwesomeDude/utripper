@@ -3,12 +3,6 @@
 
 DEFINES = -DINLINE=inline
 
-# If you use system-supplied regex library, uncomment this
-#DEFINES += -DUSE_SYSTEM_REGEX
-
-# If you want to compile glibc regex functions, uncomment this line
-EXTRAOBJS += regex.o
-
 # if you don't have an MMX cpu, comment this line out
 DEFINES += -DHAVE_MMX
 
@@ -54,9 +48,6 @@ crypt_util.o : crypt_util.c crypt_util.h crypt_core32.c crypt_core64.c
 
 crypttest: crypttest.c crypt_util.o $(EXTRAOBJS)
 	$(CC) -DHAVE_MMX -O -o $@ crypttest.c crypt_util.o $(EXTRAOBJS) -lcrypt
-
-regex.o : regex.c regex.h
-	$(CC) $(CFLAGS) -DSTDC_HEADERS -I. -c regex.c
 
 crypt_core_mmx.o : crypt_core_mmx.S
 
