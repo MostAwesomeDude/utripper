@@ -21,7 +21,7 @@ DEFINES += -DHAVE_SSE
 
 ASMDEFS = $(DEFINES)
 
-CFLAGS = -O3 -finline-functions -fomit-frame-pointer -Wall -msse3
+CFLAGS = -O3 -finline-functions -fomit-frame-pointer -Wall -march=native
 #CFLAGS = -O2 -pg -finline-functions -Wall
 
 ASMSRC = crypt_core_mmx.S
